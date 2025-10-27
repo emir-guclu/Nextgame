@@ -1,68 +1,68 @@
-# 🎮 NextGame Öneri Motoru
+# 🎮 NextGame Recommendation Engine
 
 [![Python Version](https://img.shields.io/badge/Python-3.9+-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Bu proje, kullanıcının girdiği bir oyuna dayanarak anlamsal benzerlik ve yapay zeka kürasyonu kullanarak kişiselleştirilmiş oyun önerileri sunan bir web uygulamasıdır.
+This project is a web application that provides personalized game recommendations using semantic similarity and AI curation based on a game entered by the user.
 
-## ✨ Özellikler
+## ✨ Features
 
-* **Akıllı Arama:** Siz yazarken oyun isimlerini otomatik tamamlar ve veritabanında var olan oyunları önerir.
-* **Anlamsal Öneri:** Girdiğiniz oyuna en çok benzeyen oyunları, oyun açıklamaları ve meta verileri üzerinden hesaplanan vektör benzerlikleri (Sentence Transformers) ile bulur.
-* **Yapay Zeka Kürasyonu:** Benzer oyun listesini Google Gemini 2.5 Flash modeline göndererek, aralarından en dikkat çekici 3 tanesini seçer ve her biri için özgün yorumlar (neden önerildiği, kime hitap ettiği) üretir.
-* **Çoklu Dil Desteği:** Arayüz metinleri ve LLM tarafından üretilen öneri yorumları için Türkçe ve İngilizce dil seçeneği sunar.
-* **Modern Arayüz:** Basit, temiz ve karanlık mod temalı bir web arayüzü.
+* **Intelligent Search:** Autocompletes game names as you type, suggesting existing games from the database.
+* **Semantic Recommendations:** Finds games most similar to your input using vector similarity (Sentence Transformers) calculated from game descriptions and metadata.
+* **AI Curation:** Sends the list of similar games to the Google Gemini 2.5 Flash model to select the top 3 most interesting ones and generate unique comments (why it's recommended, who it's for) for each.
+* **Multi-Language Support:** Offers Turkish and English language options for UI texts and LLM-generated recommendation comments.
+* **Modern Interface:** A simple, clean web interface with a dark mode theme.
 
-## 🛠️ Kullanılan Teknolojiler
+## 🛠️ Technologies Used
 
 * **Backend:**
     * Python 3.9+
-    * FastAPI (Asenkron web framework)
-    * Uvicorn (ASGI sunucusu)
-    * SQLAlchemy (ORM - Veritabanı etkileşimi için)
-    * SQLite (Geliştirme veritabanı)
-    * Sentence Transformers (`all-MiniLM-L6-v2`) (Metin embeddingleri için)
-    * Scikit-learn (Kosinüs benzerliği hesaplama için)
-    * Google Generative AI SDK (`google-genai`) (Gemini API etkileşimi için)
-    * Pandas & PyArrow (Veri işleme ve Parquet okuma için)
-    * NumPy (Vektör işlemleri için)
-    * python-dotenv (API anahtarı yönetimi için)
+    * FastAPI (Asynchronous web framework)
+    * Uvicorn (ASGI server)
+    * SQLAlchemy (ORM for database interaction)
+    * SQLite (Development database)
+    * Sentence Transformers (`all-MiniLM-L6-v2`) (For text embeddings)
+    * Scikit-learn (For calculating cosine similarity)
+    * Google Generative AI SDK (`google-genai`) (For Gemini API interaction)
+    * Pandas & PyArrow (For data processing and reading Parquet)
+    * NumPy (For vector operations)
+    * python-dotenv (For API key management)
 * **Frontend:**
     * HTML5
     * CSS3
-    * Vanilla JavaScript (API istekleri ve DOM manipülasyonu için)
-* **Veri:**
-    * İşlenmiş ve birleştirilmiş Steam oyun veri setleri (Kaggle'dan alınmıştır).
-    * Oyun meta verileri ve embedding vektörleri SQLite veritabanında saklanır.
+    * Vanilla JavaScript (For API requests and DOM manipulation)
+* **Data:**
+    * Processed and combined Steam game datasets (sourced from Kaggle).
+    * Game metadata and embedding vectors are stored in an SQLite database.
 
-## 🏗️ Mimari Akışı (Basit)
+## 🏗️ Architecture Flow (Simple)
 
-1.  **Kullanıcı Girişi:** Frontend'den oyun adı araması başlar.
-2.  **Arama API (`/search/`):** FastAPI, isteği alır ve `crud.py`'deki fonksiyonu çağırır.
-3.  **Veritabanı (Arama):** `crud.py`, SQLite veritabanından eşleşen oyun adlarını ve logolarını çeker.
-4.  **Frontend (Arama Sonuçları):** Sonuçlar frontend'e döner ve otomatik tamamlama listesi gösterilir.
-5.  **Kullanıcı Seçimi:** Kullanıcı bir oyun seçer ve "Öneri Getir" butonuna basar.
-6.  **Öneri API (`/recommend/`):** FastAPI, isteği (oyun adı ve dil ile) alır.
-7.  **Veritabanı (Benzerlik):** `crud.py`, hedef oyunun vektörünü ve diğer tüm oyunların vektörlerini çeker, kosinüs benzerliğini hesaplar ve en benzer 20 oyunun `text_for_embedding` verisini döndürür.
-8.  **LLM Servisi (`llm_responses.py`):** Backend, bu 20 metni ve seçilen dili Google Gemini 2.5 Flash modeline gönderir.
-9.  **Yapay Zeka Analizi:** Gemini, metinleri analiz eder, 3 oyun seçer ve JSON formatında yorumları (gerekçe, not) oluşturur.
-10. **Frontend (Öneriler):** Sonuçlar frontend'e döner ve öneri kartları gösterilir.
+1.  **User Input:** Search for a game name starts from the frontend.
+2.  **Search API (`/search/`):** FastAPI receives the request and calls the function in `crud.py`.
+3.  **Database (Search):** `crud.py` fetches matching game names and header images from the SQLite database.
+4.  **Frontend (Search Results):** Results are returned to the frontend, displaying the autocomplete list.
+5.  **User Selection:** User selects a game and clicks the "Get Recommendations" button.
+6.  **Recommendation API (`/recommend/`):** FastAPI receives the request (with game name and language).
+7.  **Database (Similarity):** `crud.py` fetches the target game's vector and all other vectors, calculates cosine similarity, and returns the `text_for_embedding` data for the top 20 similar games.
+8.  **LLM Service (`llm_responses.py`):** The backend sends these 20 texts and the selected language to the Google Gemini 2.5 Flash model.
+9.  **AI Analysis:** Gemini analyzes the texts, selects 3 games, and generates comments (reason, note) in JSON format.
+10. **Frontend (Recommendations):** The results are returned to the frontend, displaying the recommendation cards.
 
-## 📸 Ekran Görüntüleri
+## 📸 Screenshots
 
-\[Buraya çalışan uygulamanın birkaç ekran görüntüsünü veya kısa bir GIF'ini ekleyin. Arama kutusu, öneri sonuçları vb.]
+\[Add a few screenshots or a short GIF of the running application here. E.g., search box, recommendation results.]
 
-## 🚀 Kurulum ve Çalıştırma
+## 🚀 Setup and Run
 
-Projeyi yerel makinenizde çalıştırmak için aşağıdaki adımları izleyin:
+Follow these steps to run the project locally:
 
-1.  **Depoyu Klonlayın:**
+1.  **Clone the Repository:**
     ```bash
-    git clone [https://github.com/KULLANICI_ADINIZ/PROJE_ADINIZ.git](https://github.com/KULLANICI_ADINIZ/PROJE_ADINIZ.git)
-    cd PROJE_ADINIZ
+    git clone [https://github.com/YOUR_USERNAME/YOUR_PROJECT_NAME.git](https://github.com/YOUR_USERNAME/YOUR_PROJECT_NAME.git)
+    cd YOUR_PROJECT_NAME
     ```
 
-2.  **Sanal Ortam Oluşturun ve Aktive Edin:**
+2.  **Create and Activate a Virtual Environment:**
     ```bash
     python -m venv venv
     # Windows
@@ -71,55 +71,53 @@ Projeyi yerel makinenizde çalıştırmak için aşağıdaki adımları izleyin:
     source venv/bin/activate
     ```
 
-3.  **Gereksinimleri Yükleyin:**
+3.  **Install Requirements:**
     ```bash
     pip install -r requirements.txt
     ```
 
-4.  **API Anahtarını Ayarlayın:**
-    * Projenin ana dizininde `.env` adında bir dosya oluşturun.
-    * İçine Google AI Studio'dan aldığınız API anahtarını ekleyin:
+4.  **Set Up API Key:**
+    * Create a file named `.env` in the root directory of the project.
+    * Add your API key obtained from Google AI Studio into it:
         ```env
-        GEMINI_API_KEY=BURAYA_API_ANAHTARINIZI_YAPISTIRIN
+        GEMINI_API_KEY=YOUR_API_KEY_HERE
         ```
 
-5.  **Veritabanını Hazırlayın:**
-    * \[**SEÇENEK 1 (Önerilen):** Eğer `nextgame.db` dosyasını depoya eklediyseniz, bu adımı atlayabilirsiniz.]
-    * \[**SEÇENEK 2:** Gerekli Parquet dosyasını (`data_with_embeddings.parquet`) projenin ana dizinine yerleştirin.]
-    * Aşağıdaki komutla veritabanını oluşturun ve verileri yükleyin (Bu işlem biraz zaman alabilir):
+5.  **Prepare the Database:**
+    * **IMPORTANT:** This repository does not include the large data files (`.parquet`, `.db`) due to size limits.
+    * You need to obtain the necessary `data_with_embeddings.parquet` file (or generate it using the data processing scripts \[mention script names if applicable]). Place this file in the project's root directory.
+    * Run the following command to create the database (`nextgame.db`) and populate it with data (This might take a few moments):
         ```bash
-        python populate_db.py 
+        python populate_db.py
         ```
-        *(Not: `populate_db.py` script'inin doğru Parquet dosya yolunu kullandığından emin olun.)*
+        *(Note: Ensure the `populate_db.py` script points to the correct Parquet file path.)*
 
-6.  **Sunucuyu Başlatın:**
+6.  **Start the Server:**
     ```bash
-    uvicorn main:app --reload --port 8000 
+    uvicorn main:app --reload --port 8000
     ```
-    *(Veya farklı bir port kullanmak isterseniz `--port PORT_NUMARASI` ekleyin.)*
+    *(Or add `--port YOUR_PORT_NUMBER` if you want to use a different port.)*
 
-7.  **Uygulamayı Açın:**
-    Tarayıcınızda `http://127.0.0.1:8000` (veya belirlediğiniz port) adresine gidin.
+7.  **Open the Application:**
+    Navigate to `http://127.0.0.1:8000` (or your specified port) in your web browser.
 
-## 📝 API Endpoints (Kısaca)
+## 📝 API Endpoints (Brief)
 
-* `GET /`: Frontend `index.html` dosyasını sunar.
-* `GET /search/?q={query}`: Girilen `query` ile başlayan oyun adlarını ve logolarını döndürür (otomatik tamamlama için).
-* `GET /recommend/?game_name={name}&lang={tr|en}`: Belirtilen `game_name` için `lang` dilinde (varsayılan 'en') 3 oyun önerisi döndürür.
+* `GET /`: Serves the frontend `index.html` file.
+* `GET /search/?q={query}`: Returns game names and header images starting with the given `query` (for autocomplete).
+* `GET /recommend/?game_name={name}&lang={en|tr}`: Returns 3 game recommendations for the specified `game_name` in the requested `lang` (default 'en').
 
-## 🌱 Gelecek İyileştirmeler (Fikirler)
+## 🌱 Future Improvements (Ideas)
 
-* Kullanıcı hesapları ve Steam entegrasyonu (`User` modeli).
-* Kullanıcının sahip olduğu oyunlara göre kişiselleştirilmiş öneriler.
-* PostgreSQL ve `pgvector` eklentisi ile daha verimli vektör araması.
-* Daha gelişmiş filtreleme seçenekleri (tür, etiket, fiyat aralığı vb.).
-* İşbirlikçi filtreleme (Collaborative Filtering) yöntemlerinin eklenmesi.
-* Frontend'i Next.js gibi modern bir framework ile yeniden yazmak.
+* User accounts and Steam integration (`User` model).
+* Personalized recommendations based on the user's owned games.
+* More efficient vector search using PostgreSQL with the `pgvector` extension.
+* Advanced filtering options (genre, tags, price range, etc.).
+* Addition of Collaborative Filtering methods.
+* Rewriting the frontend with a modern framework like Next.js or React.
 
-## 📄 Lisans
+## 📄 License
 
-Bu proje MIT Lisansı altında lisanslanmıştır. Detaylar için `LICENSE` dosyasına bakınız. \[Eğer bir LICENSE dosyası eklemediyseniz, GitHub üzerinden kolayca ekleyebilirsiniz.]
+This project is licensed under the MIT License. See the `LICENSE` file for details.
 
 ---
-
-Umarım bu README taslağı işini görür! Başka eklemek veya değiştirmek istediğin bir şey olursa söylemen yeterli.
