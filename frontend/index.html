@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="tr" id="htmlLang"> 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">NextGame Öneri Motoru</title> 
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <h1 data-translate="main_title">🎮 NextGame Öneri Motoru</h1>
+        <p data-translate="subtitle">Sevdiğin bir oyunu yaz, sana benzerlerini ve yeni cevherleri bulalım.</p>
+        
+        <div class="search-container">
+            <div class="search-box">
+                <input type="text" id="gameInput" data-translate="placeholder_text" placeholder="Örn: The Witcher 3: Wild Hunt" autocomplete="off">
+                <button id="searchButton" data-translate="button_text">Öneri Getir</button>
+            </div>
+            <div id="search-results-box"></div>
+        </div>
+
+        <div class="language-selector">
+            <span data-translate="language_label">Öneri Dili:</span>
+            <button class="lang-button active" data-lang="tr">Türkçe</button>
+            <button class="lang-button" data-lang="en">English</button>
+        </div>
+
+        <div id="results"></div>
+        <div class="loading" id="loading" data-translate="loading_text">Analiz ediliyor, lütfen bekleyin...</div>
+        <div id="error"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

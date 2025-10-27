@@ -1,0 +1,8 @@
+__pycache__/
+ortam/
+database/__pycache__/
+.env
+backend/.env
+venv/
+*.db
+*.parquet

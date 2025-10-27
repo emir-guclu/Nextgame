@@ -1,0 +1,187 @@
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: #121212;
+    color: #e0e0e0;
+    margin: 0;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    flex-direction: column;
+}
+.container {
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+}
+h1 {
+    color: #1DB954; /* Metin rengi */
+    font-size: 2.5em; /* Yazı boyutu */
+    text-align: center; /* Ortala */
+    margin-bottom: 20px; /* Alttan boşluk */
+    /* YENİ EKLENEN VEYA DEĞİŞEN KISIMLAR */
+    line-height: 1.2; /* Satır aralığını biraz aç (varsa çift satır için) */
+    word-break: break-word; /* Uzun kelimeleri bölebilir */
+    white-space: normal; /* Metnin normal şekilde kaydırılmasını sağlar */
+    max-width: 90%; /* Çok geniş ekranlarda bile çok yayılmasın */
+    margin-left: auto; /* Ortalamak için */
+    margin-right: auto; /* Ortalamak için */
+}
+
+/* --- ARAMA KUTUSU VE ÖNERİLER --- */
+
+.search-container {
+    position: relative;
+    width: 100%;
+    margin-bottom: 30px;
+}
+.search-box {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 0;
+}
+input[type="text"] {
+    flex-grow: 1;
+    padding: 15px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    background-color: #282828;
+    color: #e0e0e0;
+}
+button {
+    padding: 15px 25px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #121212;
+    background-color: #1DB954;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+button:hover {
+    background-color: #1ed760;
+}
+
+/* ID DEĞİŞTİ: Arama sonuçları kutusu */
+#search-results-box {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    /* Genişliği tam olarak input ile aynı yapmak için daha sağlam bir yöntem */
+    right: 140px; /* Buton genişliği (115px) + gap (10px) + biraz pay (15px) */
+    
+    background-color: #282828;
+    border: 1px solid #444;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    z-index: 10;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+/* CLASS DEĞİŞTİ: Arama sonucu öğesi */
+.search-result-item {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    color: #e0e0e0;
+    cursor: pointer;
+    text-align: left;
+    transition: background-color 0.1s;
+}
+.search-result-item:hover {
+    background-color: #1DB954;
+    color: #121212;
+}
+
+/* CLASS DEĞİŞTİ: Arama sonucu resmi */
+.search-result-image {
+    width: 60px;
+    height: 34px;
+    margin-right: 10px;
+    border-radius: 4px;
+    object-fit: cover;
+    flex-shrink: 0; /* Küçülmemesi için */
+}
+
+/* Input'a odaklanıldığında ve sonuç kutusu açıkken köşeleri düzelt */
+input[type="text"]:focus {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+
+/* --- ASIL ÖNERİ SONUÇLARI --- */
+
+#results {
+    text-align: left;
+}
+.game-card {
+    background-color: #181818;
+    border: 1px solid #282828;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 15px;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeIn 0.5s ease-out forwards;
+}
+.game-card h2 {
+    margin-top: 0;
+    color: #ffffff;
+}
+.game-card .type {
+    font-style: italic;
+    color: #b3b3b3;
+    font-size: 0.9em;
+    margin-bottom: 10px;
+}
+.loading, #error {
+    display: none;
+    margin-top: 20px;
+    font-size: 1.2em;
+}
+#error {
+    color: #e53e3e;
+}
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.language-selector {
+    margin-bottom: 20px;
+    font-size: 0.9em;
+    color: #b3b3b3;
+    /* YENİ: Flexbox ile hizalama */
+    display: flex;          /* Öğeleri yan yana getir */
+    justify-content: center;/* Yatayda ortala (container ortada olduğu için zaten ortada olmalı ama garanti olsun) */
+    align-items: center;    /* DİKEYDE ORTALA - Kaymayı düzeltecek olan bu! */
+}
+
+/* Span etiketinin sağındaki boşluğu koruyalım */
+.language-selector span {
+    margin-right: 10px;
+}
+
+.lang-button {
+    padding: 5px 10px;
+    font-size: 0.9em; /* Ana yazı boyutuyla aynı kalsın */
+    background-color: #282828;
+    color: #b3b3b3;
+    border: 1px solid #444;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 5px;
+    transition: all 0.2s;
+    /* YENİ: Butonların dikey hizalamasını garantiye al (genelde flex yeterli olur) */
+    vertical-align: middle; 
+}
+
+/* ... (geri kalan stiller aynı: .lang-button.active, .lang-button:not(.active):hover vs.) ... */
