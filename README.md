@@ -120,4 +120,9 @@ Follow these steps to run the project locally:
 
 This project is licensed under the MIT License. See the `LICENSE` file for details.
 
+## 📸 Screenshots
+
+Here's a glimpse of the NextGame Recommendation Engine in action:
+
+![NextGame Recommendation Example](assets/recomendation.png)
 ---
